@@ -27,6 +27,10 @@ Route::get('/dataform', function () {
     return Inertia::render('DataForm');
 })->name('dataform.form');
 
+Route::get('/indicatorform', function () {
+    return Inertia::render('IndicatorForm');
+})->name('indicator.form');
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
