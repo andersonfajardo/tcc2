@@ -14,6 +14,10 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/dashboardform', function () {
+    return Inertia::render('DashboardForm');
+})->name('dashboard.form');
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

@@ -72,7 +72,7 @@
         okrData: [
           { title: "Faturamento", type: "line" },
           { title: "Rentabilidade (%)", type: "bar" },
-          { title: "Churn", type: "" },
+          { title: "Churn", type: "pie" },
         ],
         kpiData: [
           { title: "Crescimento de Vendas", type: "line" },
