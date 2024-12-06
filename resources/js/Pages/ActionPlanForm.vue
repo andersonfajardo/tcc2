@@ -14,7 +14,7 @@
         <!-- Barra lateral -->
         <aside class="sidebar">
           <ul>
-            <li @click="goTo('dashboard')"><i class="icon">🖥️</i></li>
+            <li @click="goTo('dashboard.form')"><i class="icon">🖥️</i></li>
             <li @click="goTo('indicators')"><i class="icon">📊</i></li>
             <li @click="goTo('action-plans')"><i class="icon">📁</i></li>
             <li @click="goTo('teams')"><i class="icon">👥</i></li>
