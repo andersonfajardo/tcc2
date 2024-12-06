@@ -1,0 +1,222 @@
+<template>
+    <div class="action-plan-container">
+      <!-- Barra superior -->
+      <header class="dashboard-header">
+        <div class="company-name">NOME DA EMPRESA</div>
+        <div class="user-info">
+          <span class="user-name">USUÁRIO</span>
+          <button @click="logout" class="logout-button">SAIR</button>
+        </div>
+      </header>
+  
+      <!-- Layout principal -->
+      <div class="dashboard-layout">
+        <!-- Barra lateral -->
+        <aside class="sidebar">
+          <ul>
+            <li @click="goTo('dashboard')"><i class="icon">🖥️</i></li>
+            <li @click="goTo('indicators')"><i class="icon">📊</i></li>
+            <li @click="goTo('action-plans')"><i class="icon">📁</i></li>
+            <li @click="goTo('teams')"><i class="icon">👥</i></li>
+            <li @click="goTo('logout')"><i class="icon">🔌</i></li>
+          </ul>
+        </aside>
+  
+        <!-- Conteúdo principal -->
+        <main class="main-content">
+          <div class="action-plan-header">
+            <h2>PLANO DE AÇÃO</h2>
+          </div>
+  
+          <!-- Tabela de Planos de Ação -->
+          <div class="table-container">
+            <table class="action-plan-table">
+              <thead>
+                <tr>
+                  <th>O QUE?</th>
+                  <th>POR QUE?</th>
+                  <th>QUEM?</th>
+                  <th>QUANDO?</th>
+                  <th>ONDE?</th>
+                  <th>COMO?</th>
+                  <th>QUANTO?</th>
+                  <th>DASHBOARD</th>
+                  <th>AÇÕES</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(plan, index) in actionPlans" :key="index">
+                  <td>{{ plan.what }}</td>
+                  <td>{{ plan.why }}</td>
+                  <td>{{ plan.who }}</td>
+                  <td>{{ plan.when }}</td>
+                  <td>{{ plan.where }}</td>
+                  <td>{{ plan.how }}</td>
+                  <td>{{ plan.howmuch }}</td>
+                  <td>{{ plan.dashboard ? "Sim" : "Não" }}</td>
+                  <td class="actions">
+                    <button @click="editPlan(index)" class="edit-button">✏️</button>
+                    <button @click="deletePlan(index)" class="delete-button">🗑️</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+  
+          <!-- Botão de Inserção -->
+          <div class="insert-button">
+            <button @click="openInsertForm">INSERIR</button>
+          </div>
+        </main>
+      </div>
+    </div>
+  </template>
+  
+  <script>
+  export default {
+    name: "ActionPlanForm",
+    data() {
+      return {
+        actionPlans: [], // Lista de planos de ação
+        newPlan: {
+          what: "",
+          why: "",
+          who: "",
+          when: "",
+          where: "",
+          how: "",
+          howmuch: "",
+          dashboard: false,
+        },
+      };
+    },
+    methods: {
+      goTo(route) {
+        this.$router.push(`/${route}`);
+      },
+      logout() {
+        localStorage.removeItem("token");
+        this.$router.push("/login");
+      },
+      addPlan() {
+        this.actionPlans.push({ ...this.newPlan });
+        this.resetForm();
+      },
+      editPlan(index) {
+        const plan = this.actionPlans[index];
+        Object.assign(this.newPlan, plan);
+        this.actionPlans.splice(index, 1);
+      },
+      deletePlan(index) {
+        this.actionPlans.splice(index, 1);
+      },
+      resetForm() {
+        this.newPlan = {
+          what: "",
+          why: "",
+          who: "",
+          when: "",
+          where: "",
+          how: "",
+          howmuch: "",
+          dashboard: false,
+        };
+      },
+    },
+  };
+  </script>
+  
+  <style scoped>
+  /* Layout principal */
+  .action-plan-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+    background-color: #f9f9f9;
+  }
+  
+  .company-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .user-info {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  /* Barra lateral */
+  .sidebar {
+    width: 70px;
+    background-color: #f4f4f4;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    padding-top: 1rem;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar li {
+    text-align: center;
+    padding: 1rem 0;
+    cursor: pointer;
+  }
+  
+  .icon {
+    font-size: 2.5rem;
+  }
+  
+  .sidebar li:hover {
+    background-color: #ddd;
+  }
+  
+  /* Tabela */
+  .table-container {
+    margin-top: 2rem;
+    overflow-x: auto;
+  }
+  
+  .action-plan-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+  }
+  
+  .action-plan-table th,
+  .action-plan-table td {
+    border: 1px solid #ddd;
+    padding: 0.5rem;
+  }
+  
+  /* Botão de Inserção */
+  .insert-button {
+    margin: 1rem 0;
+    text-align: right;
+  }
+  
+  .insert-button button {
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .insert-button button:hover {
+    background-color: #0056b3;
+  }
+  </style>
+  
+  
