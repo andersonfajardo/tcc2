@@ -2,9 +2,9 @@
     <div class="indicators-container">
       <!-- Barra superior -->
       <header class="dashboard-header">
-        <div class="company-name">NOME DA EMPRESA</div>
+        <div class="company-name">{{ company.name }}</div>
         <div class="user-info">
-          <span class="user-name">USUÁRIO</span>
+          <span class="user-name">{{ user.name }}</span>
           <button @click="logout" class="logout-button">SAIR</button>
         </div>
       </header>
@@ -14,11 +14,11 @@
         <!-- Barra lateral -->
         <aside class="sidebar">
           <ul>
-            <li @click="goTo('dashboard')"><i class="icon">🖥️</i></li>
-            <li @click="goTo('indicators')"><i class="icon">📊</i></li>
-            <li @click="goTo('data')"><i class="icon">📁</i></li>
-            <li @click="goTo('teams')"><i class="icon">👥</i></li>
-            <li @click="goTo('settings')"><i class="icon">🔧</i></li>
+            <li @click="goTo('dashboard.form')"><i class="icon">🖥️</i></li>
+            <li @click="goTo('indicator.form')"><i class="icon">📊</i></li>
+            <li @click="goTo('dataform.form')"><i class="icon">📁</i></li>
+            <li @click="goTo('actionplan.form')"><i class="icon">📈</i></li>
+            <li @click="goTo('dashboard.form')"><i class="icon">🔧</i></li>
           </ul>
         </aside>
   
@@ -98,6 +98,10 @@
   
   export default {
     name: "IndicatorForm",
+    props: {
+        user: Object, // Recebe o usuário do back
+        company: Object, // Recebe os dados da empresa
+    },
     data() {
       return {
         newIndicator: {
@@ -128,12 +132,13 @@
       },
       goTo(route) {
         //this.$router.push(`/${route}`);
-        //corrigido para rota correta usando inertia
+        //corrigido para rota correta
         this.$inertia.visit(this.route(route));
       },
       logout() {
-        localStorage.removeItem("token");
-        this.$router.push("/login");
+        //localStorage.removeItem("token");
+        //this.$router.push("/login");
+        this.$inertia.post(this.route('logout'));
       },
       resetForm() {
         this.newIndicator = { name: "", description: "", type: "", selected: false };

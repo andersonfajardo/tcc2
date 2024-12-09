@@ -30,6 +30,14 @@ Route::get('/dashboardform', function () {
     ]);
 })->middleware(['auth'])->name('dashboard.form');
 
+Route::get('/indicatorform', function () {
+    $user = Auth::user()->load('company');
+    return Inertia::render('IndicatorForm', [
+        'user' => $user,
+        'company' => $user->company,
+    ]);
+})->middleware(['auth'])->name('indicator.form');
+
 // rota para logout do sistema
 Route::get('/actionplanform', function () {
     return Inertia::render('ActionPlanForm');
@@ -38,10 +46,6 @@ Route::get('/actionplanform', function () {
 Route::get('/dataform', function () {
     return Inertia::render('DataForm');
 })->name('dataform.form');
-
-Route::get('/indicatorform', function () {
-    return Inertia::render('IndicatorForm');
-})->name('indicator.form');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
