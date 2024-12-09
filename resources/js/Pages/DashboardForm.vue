@@ -19,10 +19,10 @@
         <aside class="sidebar">
           <ul>
             <li @click="goTo('dashboard.form')"><i class="icon">🖥️</i></li>
-            <li @click="goTo('indicators')"><i class="icon">📊</i></li>
-            <li @click="goTo('data')"><i class="icon">📁</i></li>
-            <li @click="goTo('teams')"><i class="icon">📈</i></li>
-            <li @click="goTo('settings')"><i class="icon">🔧</i></li>
+            <li @click="goTo('indicator.form')"><i class="icon">📊</i></li>
+            <li @click="goTo('dataform.form')"><i class="icon">📁</i></li>
+            <li @click="goTo('actionplan.form')"><i class="icon">📈</i></li>
+            <li @click="goTo('dashboard.form')"><i class="icon">🔧</i></li>
           </ul>
         </aside>
   
@@ -130,8 +130,10 @@
       },
 
       goTo(route) {
-        console.log(`Navegando para ${route}`);
-        this.$router.push(`/${route}`);
+        //console.log(`Navegando para ${route}`);
+        //this.$router.push(`/${route}`);
+        //corrigindo usando o inertia
+        this.$inertia.visit(this.route(route));
       },
       generateDates() {
         const today = new Date();

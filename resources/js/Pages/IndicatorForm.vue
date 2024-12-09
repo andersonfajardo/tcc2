@@ -127,7 +127,9 @@
         this.indicators.splice(index, 1);
       },
       goTo(route) {
-        this.$router.push(`/${route}`);
+        //this.$router.push(`/${route}`);
+        //corrigido para rota correta usando inertia
+        this.$inertia.visit(this.route(route));
       },
       logout() {
         localStorage.removeItem("token");
