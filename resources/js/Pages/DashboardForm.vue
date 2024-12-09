@@ -4,7 +4,8 @@
     <div class="dashboard-container">
       <!-- Barra superior -->
       <header class="dashboard-header">
-        <div class="company-name">NOME DA EMPRESA</div>
+        <!-- <div class="company-name">NOME DA EMPRESA</div>-->
+        <div class="company-name">{{ company.name }}</div>
         <div class="user-info">
           <!-- //buscando nome do usuário logado do backend -->
           <span class="user-name">{{ user.name }}</span>
@@ -90,7 +91,8 @@
   export default {
     name: "DashboardForm",
     props: {
-        user: Object, // Recebe o usuário do backend
+        user: Object, // Recebe o usuário do back
+        company: Object, // Recebe os dados da empresa
     },
     name: "DashboardForm",
     data() {

@@ -33,7 +33,12 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        $user = Auth::user();
+        $user->load('company'); // Carrega os dados da empresa associada
+
+        return redirect()->intended(route('dashboard.form', absolute: false))->with([
+            'user' => $user,
+        ]);
     }
 
     /**

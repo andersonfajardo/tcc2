@@ -22,20 +22,15 @@ Route::get('/', function () {
 // rota para o dashboard form ser exibido somente para o usuário logado
 
 Route::get('/dashboardform', function () {
+    $user = Auth::user()->load('company'); // Inclui a empresa associada
     return Inertia::render('DashboardForm', [
-        'user' => auth()->user()
+        //'user' => auth()->user()
+        'user' => $user,
+        'company' => $user->company, // Adiciona a empresa ao Inertia
     ]);
 })->middleware(['auth'])->name('dashboard.form');
 
 // rota para logout do sistema
-
-Route::post('/logout', function () {
-    Auth::logout();
-    return redirect('/login');
-})->name('logout');
-
-
-
 Route::get('/actionplanform', function () {
     return Inertia::render('ActionPlanForm');
 })->name('actionplan.form');
