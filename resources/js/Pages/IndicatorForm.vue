@@ -41,13 +41,13 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(indicator, index) in this.indicators" :key="index">
+                <tr v-for="(indicator, index) in this.indicators" :key="indicator.id">
                   <td>{{ indicator.kpititle }}</td>
                   <td>{{ indicator.kpidescription }}</td>
                   <td>{{ indicator.okr }}</td>
                   <td>{{ indicator.indicator_type }}</td>
                   <td>
-                    <input type="checkbox" v-model="indicator.selected" />
+                    <input type="checkbox" v-model="indicator.dashboard" @change="updateDashboard(indicator.dashboard,indicator.id)"/>
                   </td>
                   <td>
                     <button @click="editIndicator(index)" class="action-button">✏️</button>
@@ -177,6 +177,14 @@
         this.newIndicator = { ...this.indicators[index] };
         this.indicators.splice(index, 1);
       },
+      async updateDashboard(dashboard, id) {
+        try { 
+          const postdata = {id: id, dashboard : dashboard}
+          const response = await axios.patch("/indicators", postdata);
+        }catch{
+          alert("Erro ao atualizar indicador. Tente novamente.");
+        }
+      },
       deleteIndicator(index) {
         this.indicators.splice(index, 1);
       },
@@ -233,11 +241,7 @@
       },
     },
     mounted() {
-      this.indicators = this.indicadorload;
       this.updateChartPreview();
-    },
-    beforeMount() {
-      this.indicators = this.indicadorload;
       console.log(this.indicators);
     },
   };

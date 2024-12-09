@@ -116,5 +116,17 @@ class IndicatorController extends Controller
             'data' => $history,
         ]);
     }
+
+    public function patch(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => 'required|int',
+            'dashboard' => 'required|boolean',
+        ]);
+        // Inserir no banco
+        $indicator = Indicator::find($validated['id']);
+        $indicator->update(['dashboard' => $validated['dashboard']]);
+        return response()->json($indicator, 201);
+    }
 }
 
