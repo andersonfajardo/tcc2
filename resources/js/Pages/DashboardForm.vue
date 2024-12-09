@@ -1,3 +1,5 @@
+
+
 <template>
     <div class="dashboard-container">
       <!-- Barra superior -->
@@ -81,6 +83,7 @@
   </template>
   
   <script>
+  import { Head, Link, useForm } from '@inertiajs/vue3';
   import Chart from "chart.js/auto";
   import { format, subMonths } from "date-fns";
   
@@ -115,10 +118,15 @@
         console.log("Atualizando dashboard para a data:", this.selectedDate);
         // Aqui você pode carregar novos dados do backend   
       },
+      //logout editado para trabalhar com o back 
+      //  logout() {
+      //  localStorage.removeItem("token");
+      //  this.$router.push("/login");
+      //},
       logout() {
-        localStorage.removeItem("token");
-        this.$router.push("/login");
+        this.$inertia.post(this.route('logout'));
       },
+
       goTo(route) {
         console.log(`Navegando para ${route}`);
         this.$router.push(`/${route}`);

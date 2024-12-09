@@ -27,6 +27,14 @@ Route::get('/dashboardform', function () {
     ]);
 })->middleware(['auth'])->name('dashboard.form');
 
+// rota para logout do sistema
+
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/login');
+})->name('logout');
+
+
 
 Route::get('/actionplanform', function () {
     return Inertia::render('ActionPlanForm');
