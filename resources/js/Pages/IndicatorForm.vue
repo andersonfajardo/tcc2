@@ -34,6 +34,7 @@
                 <tr>
                   <th>Nome</th>
                   <th>Descrição</th>
+                  <th>Categoria</th>
                   <th>Tipo</th>
                   <th>Dashboard</th>
                   <th>Ações</th>
@@ -43,6 +44,7 @@
                 <tr v-for="(indicator, index) in indicators" :key="index">
                   <td>{{ indicator.name }}</td>
                   <td>{{ indicator.description }}</td>
+                  <td>{{ indicator.category }}</td>
                   <td>{{ indicator.type }}</td>
                   <td>
                     <input type="checkbox" v-model="indicator.selected" />
@@ -61,25 +63,33 @@
             <h3>Novo Indicador</h3>
             <div class="form-container">
               <form @submit.prevent="saveIndicator" class="form-inline">
-                <div class="form-group">
+              <div class="form-group">
                   <label for="name">Nome:</label>
                   <input type="text" v-model="newIndicator.name" id="name" required />
-                </div>
-                <div class="form-group">
+              </div>
+              <div class="form-group">
                   <label for="description">Descrição:</label>
                   <input type="text" v-model="newIndicator.description" id="description" required />
-                </div>
-                <div class="form-group">
+              </div>
+              <div class="form-group">
+                  <label for="category">Categoria:</label>
+                  <select v-model="newIndicator.category" id="category" required>
+                      <option disabled value="">Selecione uma categoria</option>
+                      <option value="kpi">KPI</option>
+                      <option value="okr">OKR</option>
+                  </select>
+              </div>
+              <div class="form-group">
                   <label for="type">Tipo:</label>
                   <select v-model="newIndicator.type" id="type" @change="updateChartPreview" required>
-                    <option disabled value="">Selecione um tipo</option>
-                    <option value="pizza">Pizza</option>
-                    <option value="barra">Barra</option>
-                    <option value="evolucao">Evolução</option>
+                      <option disabled value="">Selecione um tipo</option>
+                      <option value="pizza">Pizza</option>
+                      <option value="barra">Barra</option>
+                      <option value="evolucao">Evolução</option>
                   </select>
-                </div>
-                <button type="submit" class="btn-save">Inserir</button>
-              </form>
+              </div>
+              <button type="submit" class="btn-save">Inserir</button>
+          </form>
   
               <!-- Preview do Gráfico -->
               <div class="chart-preview">
@@ -107,6 +117,7 @@
         newIndicator: {
           name: "",
           description: "",
+          category: "",
           type: "", // Valor inicial vazio
           selected: false,
         },
@@ -116,7 +127,7 @@
     },
     methods: {
       saveIndicator() {
-        if (this.newIndicator.name && this.newIndicator.description && this.newIndicator.type) {
+        if (this.newIndicator.name && this.newIndicator.description && this.newIndicator.type && this.newIndicator.category) {
           this.indicators.push({ ...this.newIndicator });
           this.resetForm();
         } else {
