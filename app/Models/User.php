@@ -51,4 +51,8 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function getUserIndicators(){
+        return $this->hasMany(Indicator::class);
+    }
 }

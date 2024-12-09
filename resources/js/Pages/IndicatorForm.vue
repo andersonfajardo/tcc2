@@ -41,11 +41,11 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(indicator, index) in indicators" :key="index">
-                  <td>{{ indicator.name }}</td>
-                  <td>{{ indicator.description }}</td>
-                  <td>{{ indicator.category }}</td>
-                  <td>{{ indicator.type }}</td>
+                <tr v-for="(indicator, index) in this.indicators" :key="index">
+                  <td>{{ indicator.kpititle }}</td>
+                  <td>{{ indicator.kpidescription }}</td>
+                  <td>{{ indicator.okr }}</td>
+                  <td>{{ indicator.indicator_type }}</td>
                   <td>
                     <input type="checkbox" v-model="indicator.selected" />
                   </td>
@@ -112,6 +112,7 @@
     props: {
         user: Object, // Recebe o usuário do back
         company: Object, // Recebe os dados da empresa
+        indicatorsload: Object, 
     },
     data() {
       return {
@@ -121,7 +122,7 @@
           indicator_type: 0,
           okr: null, // Valor inicial vazio
         },
-        indicators: [],
+        indicators: this.indicatorsload,
         chartInstance: null,
       };
     },
@@ -137,17 +138,20 @@
       async saveIndicator() {
       try {
         // Envia os dados do formulário ao backend
-          const response = await axios.post("/indicators", {
+          const postdata = {
           kpititle: this.newIndicator.kpititle,
           kpidescription: this.newIndicator.kpidescription,
           indicator_type: this.newIndicator.indicator_type, // Converte tipo para numérico
           okr: this.newIndicator.okr, // OKR: 1, KPI: 0
           enable: 1, // Sempre 1 ao criar
-          dashboard: 0, // Sempre visível no dashboard
-        });
+          dashboard: 0,} // Sempre visível no dashboard
+           
+          const response = await axios.post("/indicators", postdata);
 
         // Tratamento de sucesso
         alert("Indicador salvo com sucesso!");
+        indicatorload 
+        this.indicadorload.push(postdata);
         console.log(response.data);
 
         // Limpa o formulário após o sucesso
@@ -229,7 +233,12 @@
       },
     },
     mounted() {
+      this.indicators = this.indicadorload;
       this.updateChartPreview();
+    },
+    beforeMount() {
+      this.indicators = this.indicadorload;
+      console.log(this.indicators);
     },
   };
   </script>

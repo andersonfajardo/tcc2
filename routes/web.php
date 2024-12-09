@@ -36,6 +36,7 @@ Route::get('/indicatorform', function () {
     return Inertia::render('IndicatorForm', [
         'user' => $user,
         'company' => $user->company,
+        'indicatorsload' => $user->getUserIndicators
     ]);
 })->middleware(['auth'])->name('indicator.form');
 
