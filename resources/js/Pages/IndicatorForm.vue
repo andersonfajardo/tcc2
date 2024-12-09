@@ -47,7 +47,7 @@
                   <td>{{ indicator.okr }}</td>
                   <td>{{ indicator.indicator_type }}</td>
                   <td>
-                    <input type="checkbox" v-model="indicator.dashboard" @change="updateDashboard(indicator.dashboard,indicator.id)"/>
+                    <input type="checkbox" :checked="indicator.dashboard" @change="updateDashboard($event,indicator.id)"/>
                   </td>
                   <td>
                     <button @click="editIndicator(index)" class="action-button">✏️</button>
@@ -177,10 +177,12 @@
         this.newIndicator = { ...this.indicators[index] };
         this.indicators.splice(index, 1);
       },
-      async updateDashboard(dashboard, id) {
-        try { 
-          const postdata = {id: id, dashboard : dashboard}
+      async updateDashboard(event, id) {
+        try {
+          const isChecked = event.target.checked; // Retorna true ou false
+          const postdata = {id: id, dashboard : isChecked}
           const response = await axios.patch("/indicators", postdata);
+          
         }catch{
           alert("Erro ao atualizar indicador. Tente novamente.");
         }
