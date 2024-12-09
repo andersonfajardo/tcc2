@@ -62,33 +62,35 @@
           <div class="indicator-form">
             <h3>Novo Indicador</h3>
             <div class="form-container">
-              <form @submit.prevent="saveIndicator" class="form-inline">
-              <div class="form-group">
-                  <label for="kpititle">Nome:</label>
-                  <input type="text" v-model="newIndicator.kpititle" id="kpititle" required />
-              </div>
-              <div class="form-group">
-                  <label for="kpidescription">Descrição:</label>
-                  <input type="text" v-model="newIndicator.kpidescription" id="kpidescriptio" required />
-              </div>
-              <div class="form-group">
-                  <label for="okr">Categoria:</label>
-                  <select v-model="newIndicator.okr" id="okr" required>
-                      <option disabled value="">Selecione uma categoria</option>
-                      <option value="0">KPI</option>
-                      <option value="1">OKR</option>
-                  </select>
-              </div>
-              <div class="form-group">
-                  <label for="indicator_type">Tipo:</label>
-                  <select v-model="newIndicator.indicator_type" id="indicator_type" @change="updateChartPreview" required>
-                      <option disabled value="">Selecione um tipo</option>
-                      <option value="1">Pizza</option>
-                      <option value="2">Barra</option>
-                      <option value="3">Evolução</option>
-                  </select>
-              </div>
-              <button type="submit" class="btn-save">Inserir</button>
+                      <form @submit.prevent="saveIndicator" class="form-inline">
+                        <div>
+                <label for="kpititle">Título</label>
+                <input v-model="form.kpititle" id="kpititle" type="text" required />
+            </div>
+            <div>
+                <label for="kpidescription">Descrição</label>
+                <textarea v-model="form.kpidescription" id="kpidescription"></textarea>
+            </div>
+            <div>
+                <label for="kpistargetvalue">Meta</label>
+                <input v-model="form.kpistargetvalue" id="kpistargetvalue" type="number" required />
+            </div>
+            <div>
+                <label for="startdate">Data Inicial</label>
+                <input v-model="form.startdate" id="startdate" type="date" required />
+            </div>
+            <div>
+                <label for="enddate">Data Final</label>
+                <input v-model="form.enddate" id="enddate" type="date" required />
+            </div>
+            <div>
+                <label for="okr">Tipo</label>
+                <select v-model="form.okr" id="okr" required>
+                    <option value="1">OKR</option>
+                    <option value="0">KPI</option>
+                </select>
+            </div>
+            <button type="submit">Salvar</button>
           </form>
   
               <!-- Preview do Gráfico -->
@@ -105,7 +107,6 @@
   
   <script>
   import Chart from "chart.js/auto";
-  import axios from "axios";
   
   export default {
     name: "IndicatorForm",
@@ -114,61 +115,38 @@
         company: Object, // Recebe os dados da empresa
     },
     data() {
-      return {
-        newIndicator: {
-          kpititle: "",
-          kpidescription: "",
-          indicator_type: 0,
-          okr: null, // Valor inicial vazio
-        },
-        indicators: [],
-        chartInstance: null,
-      };
+        return {
+            form: {
+                kpititle: '',
+                kpidescription: '',
+                kpistargetvalue: '',
+                startdate: '',
+                enddate: '',
+                okr: 0, // Padrão: KPI
+            },
+        };
     },
     methods: {
-      //saveIndicator() {
-      //  if (this.newIndicator.name && this.newIndicator.description && this.newIndicator.type && this.newIndicator.category) {
-      //    this.indicators.push({ ...this.newIndicator });
-      //    this.resetForm();
-      //  } else {
-      //    alert("Por favor, preencha todos os campos!");
-      //  }
-      //},
       async saveIndicator() {
-      try {
-        // Envia os dados do formulário ao backend
-          const response = await axios.post("/indicators", {
-          kpititle: this.newIndicator.kpititle,
-          kpidescription: this.newIndicator.kpidescription,
-          indicator_type: this.newIndicator.indicator_type, // Converte tipo para numérico
-          okr: this.newIndicator.okr, // OKR: 1, KPI: 0
-          enable: 1, // Sempre 1 ao criar
-          dashboard: 0, // Sempre visível no dashboard
-        });
-
-        // Tratamento de sucesso
-        alert("Indicador salvo com sucesso!");
-        console.log(response.data);
-
-        // Limpa o formulário após o sucesso
-        this.newIndicator = {
-          kpititle: "",
-          kpidescription: "",
-          kpistargetvalue: null,
-          startdate: null,
-          enddate: null,
-          indicator_type: 2,
-          okr: 0,
-        };
-      } catch (error) {
-        // Tratamento de erros
-        if (error.response && error.response.data.errors) {
-          this.errors = error.response.data.errors; // Exibe erros de validação
-        } else {
-          alert("Erro ao salvar indicador. Tente novamente.");
+        try {
+            const response = await axios.post('/indicators', this.form);
+            this.$inertia.visit('/dashboard'); // Redirecionar após salvar
+        } catch (error) {
+            if (error.response && error.response.data.errors) {
+                this.errors = error.response.data.errors; // Capturar erros de validação do back-end
+            } else {
+                console.error('Erro inesperado ao salvar o indicador:', error);
+            }
         }
-      }
     },
+      async submitForm() {
+            try {
+                await axios.post('/indicators', this.form);
+                this.$inertia.visit('/dashboard');
+            } catch (error) {
+                console.error('Erro ao salvar indicador:', error);
+            }
+      },
       editIndicator(index) {
         this.newIndicator = { ...this.indicators[index] };
         this.indicators.splice(index, 1);

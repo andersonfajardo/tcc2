@@ -64,31 +64,31 @@
             <div class="form-container">
               <form @submit.prevent="saveIndicator" class="form-inline">
               <div class="form-group">
-                  <label for="kpititle">Nome:</label>
-                  <input type="text" v-model="newIndicator.kpititle" id="kpititle" required />
+                  <label for="name">Nome:</label>
+                  <input type="text" v-model="newIndicator.name" id="name" required />
               </div>
               <div class="form-group">
-                  <label for="kpidescription">Descrição:</label>
-                  <input type="text" v-model="newIndicator.kpidescription" id="kpidescriptio" required />
+                  <label for="description">Descrição:</label>
+                  <input type="text" v-model="newIndicator.description" id="description" required />
               </div>
               <div class="form-group">
-                  <label for="okr">Categoria:</label>
-                  <select v-model="newIndicator.okr" id="okr" required>
+                  <label for="category">Categoria:</label>
+                  <select v-model="newIndicator.category" id="category" required>
                       <option disabled value="">Selecione uma categoria</option>
-                      <option value="0">KPI</option>
-                      <option value="1">OKR</option>
+                      <option value="kpi">KPI</option>
+                      <option value="okr">OKR</option>
                   </select>
               </div>
               <div class="form-group">
-                  <label for="indicator_type">Tipo:</label>
-                  <select v-model="newIndicator.indicator_type" id="indicator_type" @change="updateChartPreview" required>
+                  <label for="type">Tipo:</label>
+                  <select v-model="newIndicator.type" id="type" @change="updateChartPreview" required>
                       <option disabled value="">Selecione um tipo</option>
-                      <option value="1">Pizza</option>
-                      <option value="2">Barra</option>
-                      <option value="3">Evolução</option>
+                      <option value="pizza">Pizza</option>
+                      <option value="barra">Barra</option>
+                      <option value="evolucao">Evolução</option>
                   </select>
               </div>
-              <button type="submit" class="btn-save">Inserir</button>
+              <!----><button type="submit" class="btn-save">Inserir</button>
           </form>
   
               <!-- Preview do Gráfico -->
@@ -105,7 +105,6 @@
   
   <script>
   import Chart from "chart.js/auto";
-  import axios from "axios";
   
   export default {
     name: "IndicatorForm",
@@ -116,14 +115,20 @@
     data() {
       return {
         newIndicator: {
-          kpititle: "",
-          kpidescription: "",
-          indicator_type: 0,
-          okr: null, // Valor inicial vazio
+          name: "",
+          description: "",
+          category: "",
+          type: "", // Valor inicial vazio
+          selected: false,
         },
         indicators: [],
         chartInstance: null,
       };
+    },
+    mounted() {
+      //this.updateChartPreview();
+      // busncaod os dados do back
+      this.fetchIndicators();
     },
     methods: {
       //saveIndicator() {
@@ -133,48 +138,52 @@
       //  } else {
       //    alert("Por favor, preencha todos os campos!");
       //  }
+      // },
+          async fetchIndicators() {
+            try {
+                const response = await axios.get('/indicators');
+                this.indicators = response.data;
+            } catch (error) {
+                console.error("Erro ao buscar indicadores:", error);
+            }
+        },
+        async saveIndicator() {
+          try {
+              await axios.post('/indicators', this.newIndicator);
+              this.fetchIndicators(); // Atualiza a lista
+              this.resetForm();
+          } catch (error) {
+            console.error("Erro ao salvar indicador:", error);
+          }
+        },
+      //editIndicator(index) {
+      //  this.newIndicator = { ...this.indicators[index] };
+      //  this.indicators.splice(index, 1);
       //},
-      async saveIndicator() {
-      try {
-        // Envia os dados do formulário ao backend
-          const response = await axios.post("/indicators", {
-          kpititle: this.newIndicator.kpititle,
-          kpidescription: this.newIndicator.kpidescription,
-          indicator_type: this.newIndicator.indicator_type, // Converte tipo para numérico
-          okr: this.newIndicator.okr, // OKR: 1, KPI: 0
-          enable: 1, // Sempre 1 ao criar
-          dashboard: 0, // Sempre visível no dashboard
-        });
+      async editIndicator(index) {
+          const indicator = this.indicators[index];
+          this.newIndicator = { ...indicator };
 
-        // Tratamento de sucesso
-        alert("Indicador salvo com sucesso!");
-        console.log(response.data);
-
-        // Limpa o formulário após o sucesso
-        this.newIndicator = {
-          kpititle: "",
-          kpidescription: "",
-          kpistargetvalue: null,
-          startdate: null,
-          enddate: null,
-          indicator_type: 2,
-          okr: 0,
-        };
-      } catch (error) {
-        // Tratamento de erros
-        if (error.response && error.response.data.errors) {
-          this.errors = error.response.data.errors; // Exibe erros de validação
-        } else {
-          alert("Erro ao salvar indicador. Tente novamente.");
-        }
-      }
-    },
-      editIndicator(index) {
-        this.newIndicator = { ...this.indicators[index] };
-        this.indicators.splice(index, 1);
+          try {
+              await axios.put(`/indicators/${indicator.id}`, this.newIndicator);
+              this.fetchIndicators(); // Atualiza a lista
+              this.resetForm();
+          } catch (error) {
+              console.error("Erro ao editar indicador:", error);
+          }
       },
-      deleteIndicator(index) {
-        this.indicators.splice(index, 1);
+      //deleteIndicator(index) {
+      //  this.indicators.splice(index, 1);
+      //},
+      async deleteIndicator(index) {
+          const indicator = this.indicators[index];
+
+          try {
+              await axios.delete(`/indicators/${indicator.id}`);
+              this.fetchIndicators(); // Atualiza a lista
+          } catch (error) {
+              console.error("Erro ao excluir indicador:", error);
+          }
       },
       goTo(route) {
         //this.$router.push(`/${route}`);
@@ -227,9 +236,6 @@
           },
         });
       },
-    },
-    mounted() {
-      this.updateChartPreview();
     },
   };
   </script>

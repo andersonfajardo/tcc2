@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\KPI;
+use App\Models\Indicator;
 use App\Models\OKR;
 use App\Models\Data;
 
@@ -14,12 +14,12 @@ class IndicatorController extends Controller
      */
     public function index()
     {
-        $indicators = KPI::with('okr', 'user')->get();
-
-        return response()->json([
-            'message' => 'Indicadores carregados com sucesso',
-            'data' => $indicators,
-        ]);
+        $userId = auth()->id(); // Obtém o ID do usuário logado
+        //$indicators = Indicator::where('enable', 1)->get();
+        $indicators = Indicator::where('user_id', $userId)
+        ->where('enable', 1) // Apenas indicadores ativos
+        ->get();
+        return response()->json($indicators);
     }
 
     /**
@@ -28,22 +28,23 @@ class IndicatorController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'okr_id' => 'nullable|exists:okrs,id',
             'kpititle' => 'required|string|max:100',
             'kpidescription' => 'nullable|string|max:255',
-            'kpistargetvalue' => 'required|numeric',
-            'startdate' => 'required|date',
-            'enddate' => 'required|date|after_or_equal:startdate',
-            'indicator_type' => 'required|exists:indicatortype,id',
+            'indicator_type' => 'required|in:1,2,3', // Gráficos válidos
+            'okr' => 'required|boolean', // 0 ou 1
         ]);
+        
+        // Adicionar campos fixos
+        $validated['user_id'] = auth()->id();
+        $validated['startdate'] = now();
+        $validated['createdate'] = now();
+        $validated['enable'] = 1; // Sempre habilitado
+        $validated['dashboard'] = 0; // Sempre exibido = false
+        
+        // Inserir no banco
+        $indicator = Indicator::create($validated);
 
-        $indicator = KPI::create($validated);
-
-        return response()->json([
-            'message' => 'Indicador criado com sucesso',
-            'data' => $indicator,
-        ], 201);
+        return response()->json($indicator, 201);
     }
 
     /**
@@ -51,23 +52,23 @@ class IndicatorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $indicator = KPI::findOrFail($id);
+        $indicator = Indicator::findOrFail($id);
 
         $validated = $request->validate([
-            'kpititle' => 'sometimes|string|max:100',
+            'kpititle' => 'required|string|max:100',
             'kpidescription' => 'nullable|string|max:255',
-            'kpistargetvalue' => 'sometimes|numeric',
-            'startdate' => 'sometimes|date',
-            'enddate' => 'sometimes|date|after_or_equal:startdate',
-            'indicator_type' => 'sometimes|exists:indicatortype,id',
+            'kpistargetvalue' => 'required|numeric',
+            'startdate' => 'required|date',
+            'enddate' => 'required|date',
+            'indicator_type' => 'required|integer',
+            'okr' => 'required|integer',
+            'enable' => 'required|integer',
+            'dashboard' => 'required|integer',
         ]);
 
         $indicator->update($validated);
 
-        return response()->json([
-            'message' => 'Indicador atualizado com sucesso',
-            'data' => $indicator,
-        ]);
+        return response()->json($indicator);
     }
 
     /**
@@ -75,12 +76,10 @@ class IndicatorController extends Controller
      */
     public function destroy($id)
     {
-        $indicator = KPI::findOrFail($id);
-        $indicator->delete();
+        $indicator = Indicator::findOrFail($id);
+        $indicator->update(['enable' => 0]);
 
-        return response()->json([
-            'message' => 'Indicador excluído com sucesso',
-        ]);
+        return response()->json(['message' => 'Indicator disabled successfully']);
     }
 
     /**
