@@ -53,6 +53,6 @@ class User extends Authenticatable
     }
 
     public function getUserIndicators(){
-        return $this->hasMany(Indicator::class);
+        return $this->hasMany(Indicator::class)->where('enable',1);
     }
 }
