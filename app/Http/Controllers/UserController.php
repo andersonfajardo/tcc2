@@ -32,7 +32,7 @@ class UserController extends Controller
             'name' => 'required|string|max:100',
             'username' => 'required|string|max:30|unique:User',
             'email' => 'required|email|max:30|unique:User',
-            'passwordhash' => 'required|string|min:6',
+            'password' => 'required|string|min:6',
             'datacreated' => 'nullable|date',
             'active' => 'required|boolean',
         ]);

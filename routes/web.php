@@ -15,9 +15,18 @@ Route::get('/', function () {
 });
 
 // render para a pagina de dash do projeto anterior.
+//Route::get('/dashboardform', function () {
+//    return Inertia::render('DashboardForm');
+//})->name('dashboard.form');
+
+// rota para o dashboard form ser exibido somente para o usuário logado
+
 Route::get('/dashboardform', function () {
-    return Inertia::render('DashboardForm');
-})->name('dashboard.form');
+    return Inertia::render('DashboardForm', [
+        'user' => auth()->user()
+    ]);
+})->middleware(['auth'])->name('dashboard.form');
+
 
 Route::get('/actionplanform', function () {
     return Inertia::render('ActionPlanForm');

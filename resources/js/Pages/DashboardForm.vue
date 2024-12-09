@@ -4,7 +4,8 @@
       <header class="dashboard-header">
         <div class="company-name">NOME DA EMPRESA</div>
         <div class="user-info">
-          <span class="user-name">USUÁRIO</span>
+          <!-- //buscando nome do usuário logado do backend -->
+          <span class="user-name">{{ user.name }}</span>
           <button @click="logout" class="logout-button">SAIR</button>
         </div>
       </header>
@@ -31,6 +32,26 @@
                 {{ date }}
               </option>
             </select>
+          </div>
+
+          <div v-for="(chart,index) in userdata" :key='index'>
+
+            <!-- userdata é o dado que vou receber da rota-->
+
+            <template v-if="chart.type == 'okr'">
+              <div class="okr-section">
+              <h3>OKR</h3>
+              <div class="charts">
+                <div v-for="(okr, index) in okrData" :key="index" class="chart">
+                  <h4>{{ okr.title }}</h4>
+                  <canvas :id="'okr-chart-' + index"></canvas>
+                </div>
+              </div>
+            </div>
+            </template>
+            <template v-if="chart.type == 'kpi'">
+
+            </template>
           </div>
   
           <section class="indicators">
@@ -65,6 +86,10 @@
   
   export default {
     name: "DashboardForm",
+    props: {
+        user: Object, // Recebe o usuário do backend
+    },
+    name: "DashboardForm",
     data() {
       return {
         selectedDate: "",
@@ -80,6 +105,10 @@
           { title: "Taxa de Conversão", type: "pie" },
         ],
       };
+    },
+    async beforeMount(){
+      const response = await this.$html.get(rota);
+
     },
     methods: {
       updateDashboard() {

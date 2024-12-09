@@ -12,6 +12,8 @@ defineProps<{
     status?: string;
 }>();
 
+// exemplo para fazer post no formulário
+
 const form = useForm({
     email: '',
     password: '',
@@ -25,6 +27,8 @@ const submit = () => {
         },
     });
 };
+
+// até aqui:
 </script>
 
 <template>
