@@ -74,12 +74,18 @@
                 <input v-model="newPlan.how" type="text" placeholder="Como?" required />
                 <input v-model="newPlan.howmuch" type="text" placeholder="Quanto?" required />
                 <div class="form-row">
-                        <label for="dashboardType">Selecione o tipo de gráfico:</label>
+                        <!--<label for="dashboardType">Selecione o tipo de gráfico:</label>
                         <select v-model="newPlan.dashboardType" id="dashboardType">
                           <option value="Evolucao">Gráfico de Evolução</option>
                           <option value="Barra">Gráfico em Barra</option>
                           <option value="Pizza">Gráfico em Pizza</option>
                           <option value="Linha">Gráfico de Linha</option>
+                        </select> -->
+                        <label for="id_indicator">Selecione o Indicador:</label>
+                        <select v-model="id_indicator" id="id_indicator">
+                          <option v-for="indicator in actionPlans" :key="indicator.id" :value="indicator.id">
+                            {{indicator.indicator.kpititle }}
+                          </option>
                         </select>
                  </div>
                 <button type="submit">Inserir</button>
