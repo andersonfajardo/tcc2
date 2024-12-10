@@ -60,6 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/indicators', [IndicatorController::class, 'index'])->name('indicators.index');
     Route::post('/indicators', [IndicatorController::class, 'store'])->name('indicators.store');
     Route::patch('/indicators', [IndicatorController::class, 'patch'])->name('indicators.patch');
+    Route::patch('/indicators/enable', [IndicatorController::class, 'patchEnable'])->name('indicators.patchEnable');
     Route::put('/indicators/{id}', [IndicatorController::class, 'update'])->name('indicators.update');
     Route::delete('/indicators/{id}', [IndicatorController::class, 'destroy'])->name('indicators.destroy');
 });

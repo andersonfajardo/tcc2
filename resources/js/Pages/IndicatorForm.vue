@@ -51,7 +51,7 @@
                   </td>
                   <td>
                     <button @click="editIndicator(index)" class="action-button">✏️</button>
-                    <button @click="deleteIndicator(index)" class="action-button">🗑️</button>
+                    <button @click="updateEnable(indicator.id, !indicator.enable)" class="action-button">🗑️</button>                 
                   </td>
                 </tr>
               </tbody>
@@ -148,7 +148,7 @@
            
           const response = await axios.post("/indicators", postdata);
 
-        // Tratamento de sucesso
+        // Tratamento do sucesso
         alert("Indicador salvo com sucesso!");
         indicatorload 
         this.indicadorload.push(postdata);
@@ -189,6 +189,15 @@
       },
       deleteIndicator(index) {
         this.indicators.splice(index, 1);
+      },
+      async updateEnable(id, enable) {
+        try {
+          const postdata = { id: id, enable: enable }; 
+          const response = await axios.patch("/indicators/enable", postdata);
+          window.location.reload()
+        } catch {
+          alert("Erro ao atualizar o indicador. Tente novamente.");
+        }
       },
       goTo(route) {
         //this.$router.push(`/${route}`);

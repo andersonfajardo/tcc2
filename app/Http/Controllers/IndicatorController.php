@@ -128,5 +128,18 @@ class IndicatorController extends Controller
         $indicator->update(['dashboard' => $validated['dashboard']]);
         return response()->json($indicator, 201);
     }
+
+    public function patchEnable(Request $request)
+{
+    $validated = $request->validate([
+        'id' => 'required|int',
+        'enable' => 'required|boolean',
+    ]);
+    
+    $indicator = Indicator::find($validated['id']);
+    $indicator->update(['enable' => $validated['enable']]);
+
+    return response()->json($indicator, 200); // Alterei o código de status para 200 (OK) para respeitar o padrão
+}
 }
 
