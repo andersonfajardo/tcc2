@@ -44,7 +44,8 @@
                 <tr v-for="(indicator, index) in this.indicators" :key="indicator.id">
                   <td>{{ indicator.kpititle }}</td>
                   <td>{{ indicator.kpidescription }}</td>
-                  <td>{{ indicator.okr }}</td>
+                  <!--<td>{{ indicator.okr }}</td>-->
+                  <td>{{ indicator.okr === 1 ? 'OKR' : 'KPI' }}</td>
                   <td>{{ indicator.indicator_type }}</td>
                   <td>
                     <input type="checkbox" :checked="indicator.dashboard" @change="updateDashboard($event,indicator.id)"/>
@@ -150,8 +151,9 @@
 
         // Tratamento do sucesso
         alert("Indicador salvo com sucesso!");
-        indicatorload 
-        this.indicadorload.push(postdata);
+        //indicatorload 
+        //this.indicadorload.push(postdata);
+        window.location.reload()
         console.log(response.data);
 
         // Limpa o formulário após o sucesso
