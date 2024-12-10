@@ -40,10 +40,14 @@ Route::get('/indicatorform', function () {
     ]);
 })->middleware(['auth'])->name('indicator.form');
 
-// rota para logout do sistema
 Route::get('/actionplanform', function () {
-    return Inertia::render('ActionPlanForm');
-})->name('actionplan.form');
+    $user = Auth::user()->load('company'); // Inclui a empresa associada
+    return Inertia::render('ActionPlanForm', [
+        //'user' => auth()->user()
+        'user' => $user,
+        'company' => $user->company, // Adiciona a empresa ao Inertia
+    ]);
+})->middleware(['auth'])->name('actionplan.form');
 
 Route::get('/dataform', function () {
     return Inertia::render('DataForm');

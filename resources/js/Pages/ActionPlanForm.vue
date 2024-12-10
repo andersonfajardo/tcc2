@@ -2,9 +2,9 @@
     <div class="dashboard-container">
       <!-- Barra superior -->
       <header class="dashboard-header">
-        <div class="company-name">NOME DA EMPRESA</div>
+        <div class="company-name">{{ company.name }}</div>
         <div class="user-info">
-          <span class="user-name">USUÁRIO</span>
+          <span class="user-name">{{ user.name }}</span>
           <button @click="logout" class="logout-button">SAIR</button>
         </div>
       </header>
@@ -15,10 +15,10 @@
         <aside class="sidebar">
           <ul>
             <li @click="goTo('dashboard.form')"><i class="icon">🖥️</i></li>
-            <li @click="goTo('indicators')"><i class="icon">📊</i></li>
-            <li @click="goTo('action-plans')"><i class="icon">📁</i></li>
-            <li @click="goTo('teams')"><i class="icon">👥</i></li>
-            <li @click="goTo('settings')"><i class="icon">🔧</i></li>
+            <li @click="goTo('indicator.form')"><i class="icon">📊</i></li>
+            <li @click="goTo('dataform.form')"><i class="icon">📁</i></li>
+            <li @click="goTo('actionplan.form')"><i class="icon">📈</i></li>
+            <li @click="goTo('dashboard.form')"><i class="icon">🔧</i></li>
           </ul>
         </aside>
   
@@ -40,7 +40,7 @@
                   <th>ONDE?</th>
                   <th>COMO?</th>
                   <th>QUANTO?</th>
-                  <th>DASHBOARD</th>
+                  <th>INDICADOR</th>
                   <th>AÇÕES</th>
                 </tr>
               </thead>
@@ -73,22 +73,15 @@
                 <input v-model="newPlan.where" type="text" placeholder="Onde?" required />
                 <input v-model="newPlan.how" type="text" placeholder="Como?" required />
                 <input v-model="newPlan.howmuch" type="text" placeholder="Quanto?" required />
-                <label>
-                <input
-                    type="checkbox"
-                    v-model="newPlan.dashboard"
-                    />
-                    Exibir no Dashboard
-                </label>
-                <div v-if="newPlan.dashboard">
-                <select v-model="newPlan.dashboardType">
-                <option value="Evolucao">Gráfico de Evolução</option>
-                <option value="Barra">Gráfico em Barra</option>
-                <option value="Pizza">Gráfico em Pizza</option>
-                <option value="Linha">Gráfico de Linha</option>
-                </select>
-                </div>
-
+                <div class="form-row">
+                        <label for="dashboardType">Selecione o tipo de gráfico:</label>
+                        <select v-model="newPlan.dashboardType" id="dashboardType">
+                          <option value="Evolucao">Gráfico de Evolução</option>
+                          <option value="Barra">Gráfico em Barra</option>
+                          <option value="Pizza">Gráfico em Pizza</option>
+                          <option value="Linha">Gráfico de Linha</option>
+                        </select>
+                 </div>
                 <button type="submit">Inserir</button>
               </form>
             </div>
@@ -101,6 +94,10 @@
   <script>
   export default {
     name: "ActionPlanForm",
+        props: {
+        user: Object, // Recebe o usuário do back
+        company: Object, // Recebe os dados da empresa
+    },
     data() {
       return {
         actionPlans: [],
@@ -118,11 +115,13 @@
     },
     methods: {
       goTo(route) {
-        this.$router.push(`/${route}`);
+        //this.$router.push(`/${route}`);
+        this.$inertia.visit(this.route(route));
       },
       logout() {
-        localStorage.removeItem("token");
-        this.$router.push("/login");
+        //localStorage.removeItem("token");
+        //this.$router.push("/login");
+        this.$inertia.post(this.route('logout'));
       },
       addPlan() {
         this.actionPlans.push({ ...this.newPlan });
@@ -342,6 +341,16 @@
   
   .action-plan-form button:hover {
     background-color: #0056b3;
+  }
+
+  .form-row {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espaço entre o rótulo e o dropdown */
+  }
+
+  .form-row label {
+    white-space: nowrap; /* Impede quebra de linha no rótulo */
   }
   </style>
   

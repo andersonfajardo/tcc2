@@ -118,7 +118,7 @@
     methods: {
       updateDashboard() {
         console.log("Atualizando dashboard para a data:", this.selectedDate);
-        // Aqui você pode carregar novos dados do backend   
+        // Aqui carregar os dados do back
       },
       //logout editado para trabalhar com o back 
       //  logout() {
