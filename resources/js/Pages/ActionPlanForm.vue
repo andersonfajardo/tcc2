@@ -53,7 +53,7 @@
                   <td>{{ plan.where }}</td>
                   <td>{{ plan.how }}</td>
                   <td>{{ plan.howmuch }}</td>
-                  <td>{{ plan.dashboard ? `Sim - ${plan.dashboardType}` : "Não" }}</td>
+                  <td>{{ plan.indicator.kpititle}}</td>
                   <td>
                     <button @click="editPlan(index)" class="action-button">✏️</button>
                     <button @click="deletePlan(index)" class="action-button">🗑️</button>
@@ -97,10 +97,11 @@
         props: {
         user: Object, // Recebe o usuário do back
         company: Object, // Recebe os dados da empresa
+        actionplanload: Object,
     },
     data() {
       return {
-        actionPlans: [],
+        actionPlans: this.actionplanload,
         newPlan: {
           what: "",
           why: "",
@@ -147,6 +148,9 @@
           dashboard: false,
         };
       },
+    },
+    mounted() {
+        console.log(this.actionplanload);
     },
   };
   </script>

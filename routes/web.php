@@ -45,7 +45,8 @@ Route::get('/actionplanform', function () {
     return Inertia::render('ActionPlanForm', [
         //'user' => auth()->user()
         'user' => $user,
-        'company' => $user->company, // Adiciona a empresa ao Inertia
+        'company' => $user->company,
+        'actionplanload' => $user->getUserActionPlan()
     ]);
 })->middleware(['auth'])->name('actionplan.form');
 

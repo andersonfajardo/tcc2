@@ -79,4 +79,14 @@ class ActionPlanController extends Controller
             'message' => 'Plano de ação excluído com sucesso',
         ]);
     }
+
+    public function getUserActionPlan()
+    {
+        $user = Auth::user();
+
+        // Carregar os planos de ação com os indicadores relacionados
+        $actionPlans = $user->actionPlans()->with('indicator')->get();
+
+        return response()->json($actionPlans);
+    }
 }

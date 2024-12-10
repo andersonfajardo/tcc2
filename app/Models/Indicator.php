@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ActionPlan;
 
 class Indicator extends Model
 {
@@ -48,7 +49,7 @@ class Indicator extends Model
 
     public function actionPlans()
     {
-        return $this->hasMany(ActionPlan::class);
+        return $this->hasMany(ActionPlan::class, 'id_indicator');
 
     }
     public $timestamps = false; // Desabilitando timestamps padrão

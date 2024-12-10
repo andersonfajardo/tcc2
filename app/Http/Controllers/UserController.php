@@ -87,5 +87,16 @@ class UserController extends Controller
             'message' => 'Usuário excluído com sucesso',
         ]);
     }
+
+    public function getUserActionPlan()
+{
+    $user = Auth::user();
+
+    // Consulta os planos de ação relacionados ao usuário logado
+    $actionPlans = $user->actionPlansPerId()->get(); // O relacionamento corrigido será usado aqui
+
+    // Retorna o resultado como JSON
+    return response()->json($actionPlans);
+}
 }
 
