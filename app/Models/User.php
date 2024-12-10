@@ -55,4 +55,8 @@ class User extends Authenticatable
     public function getUserIndicators(){
         return $this->hasMany(Indicator::class)->where('enable',1);
     }
+
+    public function getUserActionPlan(){
+        //return $this->hasMany(ActionPlan::class)->where(condição em que eu cou trazer somente os indicadores de id_indicator do usuário logado
+    }
 }

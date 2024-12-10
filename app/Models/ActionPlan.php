@@ -10,7 +10,7 @@ class ActionPlan extends Model
     use HasFactory;
 
     protected $table = 'actionplan';
-    protected $fillable = ['what', 'why', 'who', 'when', 'where', 'how', 'howmuch', 'id_kpi'];
+    protected $fillable = ['what', 'why', 'who', 'when', 'where', 'how', 'howmuch', 'id_indicator'];
 
     public function kpi()
     {

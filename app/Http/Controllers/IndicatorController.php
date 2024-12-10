@@ -57,9 +57,9 @@ class IndicatorController extends Controller
         $validated = $request->validate([
             'kpititle' => 'required|string|max:100',
             'kpidescription' => 'nullable|string|max:255',
-            'kpistargetvalue' => 'required|numeric',
-            'startdate' => 'required|date',
-            'enddate' => 'required|date',
+            'kpistargetvalue' => 'nullable|numeric',
+            'startdate' => 'nullable|date',
+            'enddate' => 'nullable|date',
             'indicator_type' => 'required|integer',
             'okr' => 'required|integer',
             'enable' => 'required|integer',
