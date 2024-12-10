@@ -325,10 +325,10 @@ export default {
             }
 
             const ctx = this.$refs.chartCanvas.getContext('2d');
-            let chartType = 'doughnut'; // Default for "Pizza"
-            if (this.newIndicator.type === 'barra') {
+            let chartType = 'pie'; // Default for "Pizza"
+            if (this.newIndicator.indicator_type === '2') {
                 chartType = 'bar';
-            } else if (this.newIndicator.type === 'evolucao') {
+            } else if (this.newIndicator.indicator_type === '3') {
                 chartType = 'line';
             }
 
