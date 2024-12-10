@@ -27,11 +27,15 @@ class ActionPlanController extends Controller
             'why' => 'required|string|max:255',
             'who' => 'required|string|max:255',
             'when' => 'required|date',
-            'where' => 'nullable|string|max:255',
-            'how' => 'nullable|string|max:255',
-            'howmuch' => 'nullable|numeric',
-            'id_kpi' => 'required|exists:kpi,id',
+            'where' => 'required|string|max:255',
+            'how' => 'required|string|max:255',
+            'howmuch' => 'required|numeric',
+            'id_indicator' => 'required|integer', // "15" implies an integer
+            'enabled' => 'required|integer', // Single character "b"
         ]);
+
+        $validated['updated_at'] = now();
+        $validated['created_at'] = now();
 
         $actionPlan = ActionPlan::create($validated);
 
