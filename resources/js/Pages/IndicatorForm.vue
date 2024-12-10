@@ -46,7 +46,8 @@
                   <td>{{ indicator.kpidescription }}</td>
                   <!--<td>{{ indicator.okr }}</td>-->
                   <td>{{ indicator.okr === 1 ? 'OKR' : 'KPI' }}</td>
-                  <td>{{ indicator.indicator_type }}</td>
+                  <!--<td>{{ indicator.indicator_type }}</td>-->
+                  <td>{{ indicator.indicator_type === 1 ? 'Pizza' : indicator.indicator_type === 2 ? 'Barra' : indicator.indicator_type === 3 ? 'Evolução' : 'Outro' }}</td>
                   <td>
                     <input type="checkbox" :checked="indicator.dashboard" @change="updateDashboard($event,indicator.id)"/>
                   </td>
