@@ -50,9 +50,16 @@ class Indicator extends Model
     public function actionPlans()
     {
         return $this->hasMany(ActionPlan::class, 'id_indicator');
+    }
 
+    public function indicators()
+    {
+        return $this->hasMany(User::class, 'user_id');
+    }
+
+    public function type()
+    {
+        return $this->hasOne(IndicatorType::class, 'id', "indicator_type");
     }
     public $timestamps = false; // Desabilitando timestamps padrão
-
-    
 }

@@ -29,6 +29,7 @@ Route::get('/dashboardform', function () {
         //'user' => auth()->user()
         'user' => $user,
         'company' => $user->company, // Adiciona a empresa ao Inertia
+        'indicatorsdash' => $user->getUserIndicatorsDash
     ]);
 })->middleware(['auth'])->name('dashboard.form');
 

@@ -69,6 +69,10 @@ class User extends Authenticatable
         return $this->hasMany(Indicator::class)->where('enable',1);
     }
 
+    public function getUserIndicatorsDash(){
+        return $this->hasMany(Indicator::class)->where('enable',1)->where("dashboard", 1)->with("type");
+    }
+
     //public function getUserActionPlan(){
     //    return $this->hasMany(ActionPlan::class)->where('id_indicator', $this->id);
     //}
