@@ -22,6 +22,16 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($validated)) {
+            if($request->route()->action['prefix'] === 'api'){
+                $user = Auth::user();
+                $user->tokens()->delete();
+
+                return response()->json([
+                    'success' => true,
+                    'token' => explode('|', $user->createToken('auth_token')->plainTextToken)[1],
+                    'expires_in' => $user->expires_in,
+                ]);
+            }
             $request->session()->regenerate();
 
             return response()->json([
@@ -89,6 +99,15 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
+        if($request->route()->action['prefix'] === 'api'){
+            $user = Auth::user();
+            $user->tokens()->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Logout realizado com sucesso',
+            ]);
+        }
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
