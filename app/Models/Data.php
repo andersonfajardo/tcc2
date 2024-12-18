@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,9 +12,9 @@ class Data extends Model
     protected $table = 'data';
     protected $fillable = ['id_indicator', 'datavalue', 'data_type_id'];
 
-    public function kpi()
+    public function indicator()
     {
-        return $this->belongsTo(KPI::class, 'id_indicator');
+        return $this->belongsTo(Indicator::class, 'id_indicator');
     }
 
     public function dataType()

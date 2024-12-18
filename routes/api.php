@@ -13,5 +13,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/indicator', [\App\Http\Controllers\IndicatorController::class, 'index']);
 
-    Route::post('/indicator/{{id}}', [AuthController::class, 'logout']);
+    Route::post('/indicator/data/', [\App\Http\Controllers\DataController::class, 'store']);
 });

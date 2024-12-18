@@ -15,7 +15,7 @@ class DataController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'id_indicator' => 'required|exists:kpi,id',
+            'id_indicator' => 'required|exists:indicator,id',
             'datavalue' => 'required|string|max:255',
             'data_type_id' => 'required|exists:datatype,id',
         ]);
